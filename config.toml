@@ -1,0 +1,10 @@
+[auth]
+jwt_secret = "secret"
+
+[aws]
+region = "us-east-1"
+cognito_user_pool_id = "us-east-1_fZnZ0KUwp"
+cognito_client_id = "3ngnh4bihvl11id1a0e4tegopo"
+
+[database]
+uri = "mongodb+srv://admin:admin@cluster0.e6fv8sb.mongodb.net/?retryWrites=true&w=majority"
