@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import {
   AuthenticationDetails,
@@ -73,10 +73,9 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       newUser.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
-          console.log('onSuccess: ', result);
           resolve(result);
         },
-        onFailure: (err) => {
+        onFailure: (err: { name: string; code: string }) => {
           reject(err);
         },
       });
@@ -101,8 +100,7 @@ export class AuthService {
   }
 
   findAll() {
-    return this.userModel.find().populate("familyId");
-
+    return this.userModel.find().populate('familyId');
   }
 
   findOne(id: number) {
