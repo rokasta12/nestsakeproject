@@ -8,9 +8,13 @@ import {
   Delete,
   UseGuards,
   Req,
+  HttpException,
+  HttpStatus,
+  UseFilters,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
+import { AllExceptionsFilter } from 'src/common/cognito.filter';
 import { AuthService } from './auth.service';
 import { AuthenticateRequestDto } from './dto/authenticate.dto';
 import { CreateAuthDto } from './dto/create-auth.dto';
@@ -19,13 +23,13 @@ import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @Controller('')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('v1/auth/register')
   create(@Body() createAuthDto: CreateAuthDto) {
     return this.authService.register(createAuthDto);
   }
-
+  @UseFilters(AllExceptionsFilter)
   @Post('v1/auth/login')
   async authenticate(@Body() authenticateRequest: AuthenticateRequestDto) {
     return this.authService.authenticate(authenticateRequest);
@@ -49,10 +53,9 @@ export class AuthController {
 
   //BU CALISMIYO
   @Get('user/:id')
-  findOne(@Param("id") id: number){
-    return this.authService.findOne(+id)
+  findOne(@Param('id') id: number) {
+    return this.authService.findOne(+id);
   }
-
 
   /*  
   // TODO: add missing cruds Havent used thsese yet
