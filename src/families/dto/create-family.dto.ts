@@ -1,5 +1,6 @@
+import { IsString } from 'class-validator';
+
 export class CreateFamilyDto {
-    name: string;
-    email: string;
-    family: string;
+  @IsString()
+  name: string;
 }

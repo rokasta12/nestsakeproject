@@ -16,7 +16,7 @@ export class PostsService {
   create(createPostDto: {
     audioUrl: string;
     text: string;
-    date: Date;  
+    date: Date;
     userId: string;
     familyId: string;
   }) {
@@ -51,7 +51,10 @@ export class PostsService {
   }
 
   findOne(id: string) {
-    return this.postModel.findById(id).populate('author').populate('comments');
+    return this.postModel
+      .findById(id)
+      .populate('postedBy')
+      .populate('comments');
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

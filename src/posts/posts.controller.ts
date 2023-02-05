@@ -18,7 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller('posts')
 export class PostsController {
-  constructor(private readonly postsService: PostsService) { }
+  constructor(private readonly postsService: PostsService) {}
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
@@ -26,12 +26,13 @@ export class PostsController {
     @Body() createPostDto: CreatePostDto,
     @Req() req: Request & { user: any },
   ) {
-    console.log((req?.user?.familyId))
     if (!req?.user?.familyId || (req?.user?.familyId).length == 0)
       throw new HttpException('User doesnt have family', HttpStatus.NOT_FOUND);
     return this.postsService.create({
-      ...createPostDto, userId: req.user._id, familyId: req?.user?.familyId,
-      text: ''
+      ...createPostDto,
+      userId: req.user._id,
+      familyId: req?.user?.familyId,
+      text: '',
     });
   }
 
@@ -78,11 +79,8 @@ export class PostsController {
     return this.postsService.remove(+id);
   }
 
-  @Get("posts")
+  @Get('posts')
   findAllPosts() {
     return this.postsService.findAll();
   }
-
-
 }
-

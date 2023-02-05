@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import {
   AuthenticationDetails,
@@ -7,15 +7,12 @@ import {
   CognitoUserPool,
 } from 'amazon-cognito-identity-js';
 import { Config } from 'src/config/config.schema';
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { InjectCognitoIdentityProvider } from '@nestjs-cognito/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './entities/user.entity';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { AuthenticateRequestDto } from './dto/authenticate.dto';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { first } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -128,6 +125,15 @@ export class AuthService {
     const test = await this.userModel.findByIdAndUpdate(req.body._id, req.body);
     console.log(test);
     return test;
+  }
+
+  async findUserById(id: string) {
+    const user = await (await this.userModel.findById(id)).populate('familyId');
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    } else {
+      return user;
+    }
   }
 
   remove(id: number) {

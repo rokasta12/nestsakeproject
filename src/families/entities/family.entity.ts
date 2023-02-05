@@ -11,12 +11,9 @@ export class Family {
   @Prop({ required: true, type: String })
   name: string;
 
-  @Prop({ required: true, unique: true, type: String })
-  email: string;
-
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   @Type(() => User)
-  admin: User;
+  adminUser: User;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] })
   @Type(() => Post)
@@ -24,6 +21,12 @@ export class Family {
 
   @Prop({ type: [String] })
   members: string[];
+
+  @Prop({ type: String, select: false })
+  code: string;
+
+  @Prop({ type: Boolean, default: true })
+  isAvailibleForNewMembers: boolean;
 }
 
 export const FamilySchema = SchemaFactory.createForClass(Family);

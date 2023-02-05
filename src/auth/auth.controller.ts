@@ -3,15 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   UseGuards,
   Req,
   Put,
-  HttpException,
-  HttpStatus,
   UseFilters,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
@@ -19,7 +15,6 @@ import { AllExceptionsFilter } from 'src/common/cognito.filter';
 import { AuthService } from './auth.service';
 import { AuthenticateRequestDto } from './dto/authenticate.dto';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @Controller('')
@@ -52,6 +47,10 @@ export class AuthController {
     return this.authService.findAll();
   }
 
+  @Get('users/:id')
+  findOne(@Param('id') id: string) {
+    return this.authService.findUserById(id);
+  }
 
   //BU CALISMIYO
   // @Get('user/:id')
