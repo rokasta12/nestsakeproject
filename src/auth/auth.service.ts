@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import {
   AuthenticationDetails,
@@ -73,9 +73,10 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       newUser.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
+          console.log('onSuccess: ', result);
           resolve(result);
         },
-        onFailure: (err: { name: string; code: string }) => {
+        onFailure: (err) => {
           reject(err);
         },
       });
@@ -103,7 +104,7 @@ export class AuthService {
     return this.userModel.find().populate('familyId');
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.userModel.findById(id);
   }
 
@@ -113,8 +114,20 @@ export class AuthService {
     });
   }
 
+  async getUserFamilies(id: string) {
+    const user = await this.userModel.findById(id).populate('familyId');
+    console.log(user);
+    return user;
+  }
+
   update(id: number, updateAuthDto: UpdateAuthDto) {
     return `This action updates a #${id} auth`;
+  }
+
+  async updateDetails(req: any) {
+    const test = await this.userModel.findByIdAndUpdate(req.body._id, req.body);
+    console.log(test);
+    return test;
   }
 
   remove(id: number) {

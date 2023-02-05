@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { CreateFamilyDto } from './dto/create-family.dto';
 import { UpdateFamilyDto } from './dto/update-family.dto';
 import { Family } from './entities/family.entity';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class FamiliesService {
@@ -37,8 +38,10 @@ export class FamiliesService {
     return this.familyModel.find().populate('members');
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} family`;
+  async findOne(id: any) {
+    const family = await this.familyModel.findById(id);
+    console.log(family);
+    return family;
   }
 
   update(id: number, updateFamilyDto: UpdateFamilyDto) {

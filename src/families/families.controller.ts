@@ -41,7 +41,7 @@ export class FamiliesController {
   removeMember(
     @Body() removeMemberDto: { userId: string },
     @Req() req: Request & { user: any
-  }) {
+}) {
     return this.familiesService.removeMember(removeMemberDto, req.user._id);
   }
 
@@ -51,8 +51,10 @@ export class FamiliesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.familiesService.findOne(+id);
+  async findOne(@Param('id') id: any) {
+    const family = await this.familiesService.findOne(id);
+    console.log(family);
+    return family;
   }
 
   @Patch(':id')

@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Put,
   HttpException,
   HttpStatus,
   UseFilters,
@@ -23,7 +24,7 @@ import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @Controller('')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('v1/auth/register')
   create(@Body() createAuthDto: CreateAuthDto) {
@@ -43,7 +44,7 @@ export class AuthController {
   @Get('v1/auth/me')
   @UseGuards(AuthGuard('jwt'))
   async me(@Req() req: Request & { user: any }) {
-    return req.user;
+    return this.authService.getUserFamilies(req.user._id);
   }
 
   @Get('users')
@@ -51,10 +52,17 @@ export class AuthController {
     return this.authService.findAll();
   }
 
+
   //BU CALISMIYO
-  @Get('user/:id')
-  findOne(@Param('id') id: number) {
-    return this.authService.findOne(+id);
+  // @Get('user/:id')
+  // findOne(@Param('id') id: string) {
+  //   return this.authService.findOne(id);
+  // }
+
+  @Put('v1/auth/me')
+  @UseGuards(AuthGuard('jwt'))
+  async updateDetails(@Req() req: Request) {
+    return this.authService.updateDetails(req);
   }
 
   /*  
